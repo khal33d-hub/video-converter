@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data: file:; media-src file:; style-src 'self'; script-src 'self'">
+  <title>Video Converter</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <img src="../assets/icon.png" alt="" class="brand-icon">
+      <div>
+        <h1>Video Converter</h1>
+        <p class="tagline">Convert videos and make GIFs, right on your computer</p>
+      </div>
+    </div>
+    <div id="engine" class="engine" title="The converter engine">
+      <span class="dot"></span><span id="engine-text">Starting…</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- Left: the queue -->
+    <section class="queue-col">
+      <div id="dropzone" class="dropzone empty">
+        <div class="drop-art" aria-hidden="true">
+          <svg viewBox="0 0 220 140" class="art">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#a78bfa"/>
+              </linearGradient>
+              <linearGradient id="g2" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#f472b6"/><stop offset="1" stop-color="#fb923c"/>
+              </linearGradient>
+            </defs>
+            <g class="float-a">
+              <rect x="14" y="30" width="86" height="64" rx="12" fill="url(#g1)"/>
+              <g fill="rgba(255,255,255,.55)">
+                <rect x="20" y="36" width="8" height="6" rx="2"/><rect x="20" y="82" width="8" height="6" rx="2"/>
+                <rect x="86" y="36" width="8" height="6" rx="2"/><rect x="86" y="82" width="8" height="6" rx="2"/>
+              </g>
+              <path d="M50 48 L50 76 L72 62 Z" fill="#fff"/>
+            </g>
+            <g class="arrow">
+              <path d="M108 62 h20" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+              <path d="M122 52 l10 10 l-10 10" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <g class="float-b">
+              <rect x="140" y="26" width="68" height="72" rx="12" fill="url(#g2)"/>
+              <text x="174" y="70" text-anchor="middle" font-size="20" font-weight="800" fill="#fff" font-family="system-ui, sans-serif">GIF</text>
+            </g>
+          </svg>
+        </div>
+        <div class="drop-copy">
+          <h2>Drop videos here</h2>
+          <p>or choose them from your computer. MP4, MOV, MKV, WebM, AVI, WMV and more.</p>
+        </div>
+        <div class="drop-actions">
+          <button id="add-files" class="btn primary">Add videos</button>
+          <button id="add-folder" class="btn ghost">Add a folder</button>
+        </div>
+      </div>
+
+      <div id="list-head" class="list-head hidden">
+        <div id="list-summary" class="muted"></div>
+        <button id="clear" class="btn ghost small">Clear list</button>
+      </div>
+      <ul id="list" class="list"></ul>
+    </section>
+
+    <!-- Right: settings -->
+    <aside class="panel">
+      <h3 class="panel-title">Convert to</h3>
+      <div id="formats" class="formats" role="radiogroup" aria-label="Output format"></div>
+
+      <div class="field" id="quality-field">
+        <label>Quality</label>
+        <div class="segmented" id="quality" role="radiogroup">
+          <button data-v="high">Best</button>
+          <button data-v="medium">Balanced</button>
+          <button data-v="small">Smallest</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Size</label>
+        <div class="segmented" id="size" role="radiogroup"></div>
+        <div class="custom-width hidden" id="custom-width-row">
+          <input id="custom-width" type="number" min="16" max="7680" step="2" placeholder="Width">
+          <span class="muted">pixels wide, height follows</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Trim <span class="muted light">optional</span></label>
+        <div class="trim">
+          <div class="input-wrap"><span>Start</span><input id="start" placeholder="0:00"></div>
+          <div class="input-wrap"><span>Length</span><input id="length" placeholder="whole video"></div>
+        </div>
+      </div>
+
+      <div class="field" id="audio-field">
+        <label class="switch-row">
+          <span>Keep sound</span>
+          <input type="checkbox" id="audio" class="switch" checked>
+        </label>
+      </div>
+
+      <div class="field gif-only" id="gif-field">
+        <label>Smoothness <span class="muted light" id="fps-label">12 frames a second</span></label>
+        <input type="range" id="fps" min="5" max="30" step="1" value="12">
+        <label class="switch-row">
+          <span>Loop forever</span>
+          <input type="checkbox" id="loop" class="switch" checked>
+        </label>
+        <p class="hint">GIFs get large quickly. Short clips (3 to 6 seconds) at 480 pixels wide work best.</p>
+      </div>
+
+      <div class="field">
+        <label>Save to</label>
+        <div class="segmented" id="dest" role="radiogroup">
+          <button data-v="same">Next to originals</button>
+          <button data-v="folder">A folder…</button>
+        </div>
+        <button id="dest-folder" class="dest-path hidden" title="Change folder"></button>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="bottombar">
+    <div class="overall">
+      <div id="overall-text" class="muted">Add some videos to get started.</div>
+      <div class="bar"><div id="overall-bar" class="fill"></div></div>
+    </div>
+    <button id="cancel" class="btn ghost hidden">Cancel</button>
+    <button id="convert" class="btn convert" disabled>
+      <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M13 3 4 14h7l-1 7 9-11h-7z"/></svg>
+      <span id="convert-text">Convert</span>
+    </button>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <div id="modal-title" class="modal-title"></div>
+          <div id="modal-sub" class="muted"></div>
+        </div>
+        <button id="modal-close" class="icon-btn" aria-label="Close">✕</button>
+      </div>
+      <div id="modal-body" class="modal-body"></div>
+      <div class="modal-actions">
+        <button id="modal-open" class="btn ghost">Open in default app</button>
+        <button id="modal-show" class="btn primary">Show in folder</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

@@ -1,62 +1,52 @@
 # Video Converter
 
-A desktop app for converting videos from one format to another, or turning them into GIFs. It runs on your own computer (Windows, macOS or Linux), and nothing is uploaded anywhere.
+A desktop app for converting videos to other formats and making GIFs. It runs on your own computer (Windows, macOS or Linux) and nothing is uploaded anywhere. ffmpeg is built in, so there's nothing else to install.
 
-- **Outputs:** MP4, WebM, MKV, MOV, AVI and GIF
-- **Inputs:** almost anything: MP4, MOV, MKV, WebM, AVI, WMV, FLV, MPEG, TS, 3GP, GIF…
-- Convert lots of files at once (add files or a whole folder)
-- Quality presets (High, Medium, Small file), resize by width, and trim with **Start at** and **Length**
-- GIFs use a custom colour palette for each clip, so they look far better than a basic conversion; choose the frame rate and whether they loop
-- Live progress, Cancel, and an **Open output folder** button
-- It never overwrites a file: if `clip.mp4` already exists you get `clip (1).mp4`
+![Video Converter turning four videos into GIFs](docs/screenshot.png)
 
-## Put it on your computer
+- **Convert to:** MP4, WebM, MKV, MOV, AVI and GIF
+- **Opens:** almost any video: MP4, MOV, MKV, WebM, AVI, WMV, FLV, MPEG, TS, 3GP, GIF…
+- Drag in lots of videos at once, or a whole folder
+- Thumbnails and details for every file (length, size, resolution, codecs)
+- Quality (Best, Balanced, Smallest), resizing, and trimming with **Start** and **Length**
+- GIFs get a custom colour palette for each clip, so they look much better than a basic conversion. You choose the smoothness (frame rate) and whether they loop
+- Live progress, Cancel, and a built-in preview of the finished file
+- Never overwrites anything: if `clip.mp4` already exists you get `clip (1).mp4`
+- Light and dark mode, following your system setting
 
-Keep this whole folder together, somewhere permanent such as your Documents folder, then follow the steps for your system. The first time, the launcher checks for the two free things the app needs (**Python** and **ffmpeg**) and offers to install anything that's missing.
+## Download and install
 
-### Windows
+Go to the **[Releases](../../releases/latest)** page and download the file for your computer:
 
-1. Double-click **`Start Video Converter.bat`**.
-   - If Windows says "Windows protected your PC", click **More info**, then **Run anyway**.
-   - If it offers to install Python or ffmpeg, press **Y**. After installing Python, double-click the launcher again.
-2. For a desktop icon, double-click **`Add Desktop Shortcut (Windows).bat`** once. From then on, open the app from the **Video Converter** icon on your desktop. You can also right-click that icon and choose **Pin to Start** or **Pin to taskbar**.
+| Your computer | File |
+|---|---|
+| **Windows** | `Video-Converter-Setup-….exe` (installs with a desktop and Start menu shortcut) or `Video-Converter-Portable-….exe` (runs without installing) |
+| **Mac** (M1 or newer) | `Video-Converter-…-mac.dmg` |
+| **Linux** | `….AppImage` (any distribution) or `….deb` (Ubuntu, Debian) |
 
-### macOS
+### The first time you open it
 
-1. Right-click **`Start Video Converter.command`** and choose **Open**, then **Open** again. You only need to right-click the first time, because macOS checks files downloaded from the internet. After that, a double-click is enough.
-   - The launcher uses [Homebrew](https://brew.sh) to install Python and ffmpeg if they're missing. If you don't have Homebrew, install it first.
-2. For a Dock icon: once the app is open, right-click its icon in the Dock and choose **Options › Keep in Dock**. Or drag `Start Video Converter.command` into the right-hand side of the Dock.
+The app isn't signed with a paid developer certificate, so your computer will ask you to confirm it the first time.
 
-### Linux
+- **Windows:** if you see "Windows protected your PC", click **More info**, then **Run anyway**.
+- **Mac:** open the `.dmg` and drag **Video Converter** into **Applications**. The first time, right-click it in Applications and choose **Open**, then **Open** again. If macOS says the app "is damaged", open Terminal and run the command below, then open it again:
 
-1. Install what it needs (Debian/Ubuntu):
+  ```bash
+  xattr -cr "/Applications/Video Converter.app"
+  ```
 
-   ```bash
-   sudo apt install python3 python3-tk ffmpeg
-   ```
-
-2. Run `add-desktop-shortcut.sh` once. **Video Converter** then appears in your applications menu and on your desktop. You can also start it directly with `start-video-converter.sh`.
-
-### If ffmpeg can't be installed
-
-Download ffmpeg yourself and put `ffmpeg` and `ffprobe` (`ffmpeg.exe` and `ffprobe.exe` on Windows) in a folder called `bin` inside this folder. The app looks there first.
-
-### Optional: drag and drop
-
-To drop files straight onto the list, run this once:
-
-```bash
-pip install tkinterdnd2
-```
+- **Linux (AppImage):** right-click the file, open **Properties › Permissions** and tick **Allow executing file as program**. Then double-click it.
 
 ## Using it
 
-1. **Add files…** (or **Add folder…**)
-2. Pick a **Format** and, if you like, quality, width, start and length
-3. Choose where to save
+1. Drag videos onto the window, or click **Add videos** or **Add a folder**
+2. Pick a format on the right
+3. Optionally change quality, size or trim
 4. Click **Convert**
 
-**Tips for GIFs.** GIFs get large fast. Keep them short (a **Length** of 3 to 6 seconds) and narrow (**Width** 320 to 480; it defaults to 480). A frame rate of 10 to 15 is smooth enough for most clips. Times can be typed as seconds (`90`) or minutes:seconds (`1:30`).
+When a file is done, click **Preview** to watch it or **Show in folder** to find it.
+
+**Tips for GIFs.** GIFs get large fast. Keep them short (a **Length** of 3 to 6 seconds) and narrow (480 pixels wide is a good start). Times can be typed as seconds (`90`) or minutes:seconds (`1:30`).
 
 ### Which format should I pick?
 
@@ -64,39 +54,57 @@ pip install tkinterdnd2
 |---|---|---|
 | MP4 | Plays almost everywhere: phones, web, WhatsApp, editors | H.264 / AAC |
 | WebM | Websites; smaller files at the same quality, slower to make | VP9 / Opus |
-| MKV | Archiving; holds lots of tracks | H.264 / AAC |
+| MKV | Archiving | H.264 / AAC |
 | MOV | Apple apps (iMovie, Final Cut, QuickTime) | H.264 / AAC |
 | AVI | Old players and devices | MPEG-4 (Xvid) / MP3 |
-| GIF | Short silent loops for chats, docs and READMEs | GIF, no audio |
+| GIF | Short silent loops for chats, docs and READMEs | GIF, no sound |
 
-## Command line (optional)
+## For developers
 
-The same engine works from a terminal, which is handy for scripts:
+Built with [Electron](https://www.electronjs.org/) and [ffmpeg](https://ffmpeg.org/) (bundled through `ffmpeg-static`). You need Node.js 22 or newer.
+
+Run it from source:
 
 ```bash
-python app/convert.py holiday.mov --to mp4
+npm install
 ```
 
 ```bash
-python app/convert.py clip.mp4 --to gif --start 3 --length 4 --width 400 --fps 15
+npm start
+```
+
+Run the tests (they convert real clips with the bundled ffmpeg):
+
+```bash
+npm test
+```
+
+Build an installer for the computer you're on (output goes to `dist/`):
+
+```bash
+npm run dist
+```
+
+### Making a release
+
+GitHub builds the Windows, Mac and Linux installers automatically on every push to `main` (download them from the **Actions** tab). To publish a release, bump `version` in `package.json` and push a matching tag:
+
+```bash
+git tag v1.0.1
 ```
 
 ```bash
-python app/convert.py *.avi --to webm --quality High --out converted
+git push origin v1.0.1
 ```
 
-Run `python app/convert.py --help` for every option.
+### Project layout
 
-## What's in this folder
-
-| File | What it does |
+| Path | What it does |
 |---|---|
-| `Start Video Converter.bat` | Opens the app on Windows |
-| `Add Desktop Shortcut (Windows).bat` | Adds a desktop icon on Windows |
-| `Start Video Converter.command` | Opens the app on macOS |
-| `start-video-converter.sh` | Opens the app on Linux |
-| `add-desktop-shortcut.sh` | Adds it to the Linux applications menu and desktop |
-| `app/app.py` | The app window |
-| `app/core.py` | Builds the ffmpeg commands and tracks progress |
-| `app/convert.py` | Command-line version |
-| `app/icon.png`, `app/icon.ico` | App icon |
+| `main.js` | Opens the window and handles file dialogs and conversions |
+| `preload.js` | The secure bridge between the window and the rest of the app |
+| `src/ffmpeg.js` | Reads file details, makes thumbnails and runs ffmpeg with progress |
+| `renderer/` | The interface: `index.html`, `styles.css`, `renderer.js` |
+| `assets/icon.png` | App icon |
+| `test/` | Tests for the conversion engine |
+| `.github/workflows/build.yml` | Builds the installers and publishes releases |
